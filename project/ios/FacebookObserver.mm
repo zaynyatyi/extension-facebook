@@ -1,6 +1,7 @@
 #import <Facebook.h>
 #import <FacebookObserver.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import <FBSDKCoreKit/FBSDKAppEvents.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 
 @implementation FacebookObserver
@@ -22,6 +23,12 @@
 	[[FBSDKApplicationDelegate sharedInstance] application:[UIApplication sharedApplication]
 								didFinishLaunchingWithOptions:launchOptions];
 
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+    // Call the 'activateApp' method to log an app event for use
+    // in analytics and advertising reporting.
+    [FBSDKAppEvents activateApp];
 }
 
 @end

@@ -359,4 +359,16 @@ class Facebook extends TaskExecutor {
 		#end
 	}
 
+	public function trackCustomEvent(
+		event : String,
+		params : Map<String, String>
+	) : Void {
+		var keys : Array<String> = [];
+		var values : Array<String> = [];
+		for (key in params.keys()) {
+			keys.push(key);
+			values.push(params.get(key));
+		}
+		FacebookCFFI.trackCustomEvent(event, keys, values);
+	}
 }

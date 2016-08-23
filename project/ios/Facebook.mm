@@ -1,6 +1,7 @@
 #import <CallbacksDelegate.h>
 #import <FacebookObserver.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import <FBSDKCoreKit/FBSDKAppEvents.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import <FBSDKShareKit/FBSDKAppInviteContent.h>
 #import <FBSDKShareKit/FBSDKAppInviteDialog.h>
@@ -25,6 +26,12 @@ namespace extension_facebook {
 			addObserver:obs
 			selector:@selector(applicationDidFinishLaunchingNotification:)
 			name:@"UIApplicationDidFinishLaunchingNotification"
+			object:nil
+		];
+		[[NSNotificationCenter defaultCenter]
+			addObserver:obs
+			selector:@selector(applicationDidBecomeActive:)
+			name:@"UIApplicationDidBecomeActive"
 			object:nil
 		];
 	}
@@ -170,6 +177,26 @@ namespace extension_facebook {
 		}
 		[FBSDKGameRequestDialog showWithContent:gameRequestContent delegate:callbacks];
 
+	}
+
+	void trackCustomEvent(
+		std::string event,
+		std::vector<std::string> &keys,
+		std::vector<std::string> &values
+	) {
+
+		NSMutableArray *nsKeys = [[NSMutableArray alloc] init];
+		for (auto k : keys) {
+			[nsKeys addObject:[NSString stringWithUTF8String:k.c_str()]];
+		}
+		NSMutableArray *nsValues = [[NSMutableArray alloc] init];
+		for (auto v : values) {
+			[nsValues addObject:[NSString stringWithUTF8String:v.c_str()]];
+		}
+
+		NSDictionary *parameters = [NSDictionary dictionaryWithObjects:nsValues forKeys:nsKeys];
+		[FBSDKAppEvents logEvent:[NSString stringWithUTF8String:event.c_str()]
+			parameters:parameters];
 	}
 
 }

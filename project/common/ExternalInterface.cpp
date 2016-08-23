@@ -234,6 +234,39 @@ static value extension_facebook_appRequest(value *arg, int count) {
 }
 DEFINE_PRIM_MULT(extension_facebook_appRequest);
 
+static value extension_facebook_trackCustomEvent(value event, value keys, value values) {
+
+	int n = 0;
+	if (keys!=NULL) {
+		n = val_array_size(keys);
+	}
+	std::vector<std::string> stlKeys;
+	for (int i=0;i<n;++i) {
+		std::string str(val_string(val_array_i(keys, i)));
+		stlKeys.push_back(str);
+	}
+
+	int k = 0;
+	if (values!=NULL) {
+		k = val_array_size(values);
+	}
+	std::vector<std::string> stlValues;
+	for (int i=0;i<k;++i) {
+		std::string str(val_string(val_array_i(values, i)));
+		stlValues.push_back(str);
+	}
+
+	extension_facebook::trackCustomEvent(
+		safe_val_string(event),
+		stlKeys,
+		stlValues
+	);
+
+	return alloc_null();
+
+}
+DEFINE_PRIM(extension_facebook_trackCustomEvent, 3);
+
 extern "C" void extension_facebook_main () {
 	val_int(0); // Fix Neko init
 }

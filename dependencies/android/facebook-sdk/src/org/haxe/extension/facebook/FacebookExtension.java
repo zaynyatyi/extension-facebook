@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
+import com.facebook.appevents.AppEventsLogger;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -49,6 +50,7 @@ public class FacebookExtension extends Extension {
 	static AccessTokenTracker accessTokenTracker;
 	static CallbackManager callbackManager;
 	static GameRequestDialog requestDialog;
+	static AppEventsLogger logger;
 	static HaxeObject callbacks;
 	static ShareDialog shareDialog;
 
@@ -57,6 +59,7 @@ public class FacebookExtension extends Extension {
 		FacebookSdk.sdkInitialize(mainContext);
 		requestDialog = new GameRequestDialog(mainActivity);
 		shareDialog = new ShareDialog(mainActivity);
+		logger = AppEventsLogger.newLogger(mainActivity);
 
 		if (callbackManager!=null) {
 			return;
@@ -414,6 +417,25 @@ public class FacebookExtension extends Extension {
 			}
 		});
 
+	}
+
+	public static void trackCustomEvent(
+		String event,
+		String keys,
+		String values
+	) {
+		String[] arrKeys = keys.split(",");
+		String[] arrValues = values.split(",");
+
+		if (arrKeys.length > 0) {
+			Bundle parameters = new Bundle();
+			for (int i = 0; i < arrKeys.length; i++) {
+				if (arrKeys[i] != "") parameters.putString(arrKeys[i], arrValues[i]);
+			}
+			logger.logEvent(event, parameters);
+		} else {
+			logger.logEvent(event);
+		}
 	}
 
 	// !Static methods interface

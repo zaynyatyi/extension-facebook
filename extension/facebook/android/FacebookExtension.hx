@@ -148,4 +148,18 @@ class FacebookExtension {
 		JNI.callStatic(fn, [message, title, arr, objectId, actionType, data]);
 	}
 
+	public static function trackCustomEvent(
+		event : String,
+		keys : Array<String>,
+		values : Array<String>
+	) {
+		var arrKeys = arrToString(keys);
+		var arrValues = arrToString(values);
+		var fn = JNI.createStaticMethod(
+			"org.haxe.extension.facebook.FacebookExtension",
+			"trackCustomEvent",
+			"(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V"
+		);
+		JNI.callStatic(fn, [event, arrKeys, arrValues]);
+	}
 }

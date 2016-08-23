@@ -31,6 +31,12 @@ namespace extension_facebook {
 		std::string data
 	);
 
+	void trackCustomEvent(
+		std::string event,
+		std::vector<std::string> &keys,
+		std::vector<std::string> &values
+	);
+
 	void onTokenChange(const char *token);
 
 	void onLoginSuccessCallback();

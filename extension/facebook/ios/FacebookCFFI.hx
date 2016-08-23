@@ -80,6 +80,12 @@ class FacebookCFFI {
 		data : String = null
 	) {};
 
+	@CPP public static function trackCustomEvent(
+		event : String,
+		keys : Array<String>,
+		values : Array<String>
+	) {};
+
 	@CPP public static function setOnLoginSuccessCallback(f : Void->Void);
 	@CPP public static function setOnLoginCancelCallback(f : Void->Void);
 	@CPP public static function setOnLoginErrorCallback(f : String->Void);
